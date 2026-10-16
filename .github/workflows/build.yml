@@ -1,0 +1,24 @@
+name: Build Distance converter
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Compile
+        shell: cmd
+        run: cl /nologo /EHsc /O2 /W3 /MT /std:c++17 /DUNICODE /D_UNICODE DistanceConverter.cpp /Fe:DistanceConverter.exe /link /SUBSYSTEM:WINDOWS
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DistanceConverter-exe
+          path: DistanceConverter.exe
